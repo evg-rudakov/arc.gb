@@ -1,0 +1,35 @@
+{
+    "name": "Online shop",
+    "description": "Homework project for Web Architecture course. Licensed by the Geekbrains",
+    "autoload": {
+        "psr-4": {
+            "": "src/",
+            "Framework\\": "app/framework/",
+            "Test\\": "test/src/"
+        },
+        "classmap": ["app/Kernel.php"]
+    },
+    "require": {
+        "php": ">=7.1.0",
+        "symfony/config": "^4.1",
+        "symfony/dependency-injection": "^4.1",
+        "symfony/http-foundation": "^4.1",
+        "symfony/http-kernel": "^4.1",
+        "symfony/routing": "^4.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.0",
+        "friendsofphp/php-cs-fixer": "^2.13"
+    },
+    "scripts": {
+        "on": "php -S 0.0.0.0:8080 -t web",
+        "test": "bin/phpunit --colors=always",
+        "ipr": "@composer install --ignore-platform-reqs",
+        "check": "bin/php-cs-fixer -vvv fix --dry-run",
+        "fix": "bin/php-cs-fixer fix"
+    },
+    "config": {
+        "bin-dir": "bin",
+        "sort-packages": true
+    }
+}
