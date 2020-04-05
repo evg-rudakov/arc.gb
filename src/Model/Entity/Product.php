@@ -32,6 +32,12 @@ class Product
         $this->name = $name;
         $this->price = $price;
     }
+    
+    public function __clone()
+    {
+        $this->nane = "Copy of " . $this->title;
+        $this->price = $this->price;
+    }
 
     /**
      * @return int
