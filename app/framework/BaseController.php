@@ -62,9 +62,9 @@ abstract class BaseController
      * @return RedirectResponse
      * @throws Exception
      */
-    protected function redirect(string $name, int $status = 200): RedirectResponse
+    protected function redirect(string $name): RedirectResponse
     {
         $route = Registry::getRoute($name);
-        return new RedirectResponse($route, $status);
+        return new RedirectResponse($route);
     }
 }

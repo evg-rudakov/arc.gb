@@ -15,12 +15,15 @@ use Service\Communication\CommunicationInterface;
 use Service\Communication\Sender\Email;
 use Service\Discount\DiscountInterface;
 use Service\Discount\NullObject;
+use Service\Discount\PromoCode;
 use Service\User\SecurityInterface;
 use Service\User\Security;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class Basket
 {
+    public $discounts = [];
+    public $builder;
     /**
      * Сессионный ключ списка всех продуктов корзины
      */
@@ -37,6 +40,17 @@ class Basket
     public function __construct(SessionInterface $session)
     {
         $this->session = $session;
+    }
+
+    /**
+     * Запускам билдер скидок
+     * @param Builder $builder
+     * @return void
+     */
+
+    public function setBuilder(Builder $builder): void
+    {
+        $this->builder = $builder;
     }
 
     /**
@@ -91,52 +105,15 @@ class Basket
      * @throws BillingException
      * @throws CommunicationException
      */
-    public function checkout(): void
+    public function checkout()
     {
-        // Здесь должна быть некоторая логика выбора способа платежа
-        $billing = new Card();
+        $builder = new BasketBuilder();
 
-        // Здесь должна быть некоторая логика получения информации о скидке
-        // пользователя
-        $discount = new NullObject();
+        $this->setBuilder($builder);
 
-        // Здесь должна быть некоторая логика получения способа уведомления
-        // пользователя о покупке
-        $communication = new Email();
+        $checkout = new Checkout($this->builder, $this->session, $this->getProductsInfo());
 
-        $security = new Security($this->session);
-
-        $this->checkoutProcess($discount, $billing, $security, $communication);
-    }
-
-    /**
-     * Проведение всех этапов заказа
-     * @param DiscountInterface $discount
-     * @param BillingInterface $billing
-     * @param SecurityInterface $security
-     * @param CommunicationInterface $communication
-     * @return void
-     * @throws BillingException
-     * @throws CommunicationException
-     */
-    public function checkoutProcess(
-        DiscountInterface $discount,
-        BillingInterface $billing,
-        SecurityInterface $security,
-        CommunicationInterface $communication
-    ): void {
-        $totalPrice = 0;
-        foreach ($this->getProductsInfo() as $product) {
-            $totalPrice += $product->getPrice();
-        }
-
-        $discount = $discount->getDiscount();
-        $totalPrice = $totalPrice - $totalPrice / 100 * $discount;
-
-        $billing->pay($totalPrice);
-
-        $user = $security->getUser();
-        $communication->process($user, 'checkout_template');
+        $checkout->checkoutProcess();
     }
 
     /**
