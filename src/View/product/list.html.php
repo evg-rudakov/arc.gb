@@ -24,7 +24,12 @@ $body = function () use ($productList, $path) {
                 <?php for ($col = 0; $col < 3; $col++, $i++): ?>
                     <td style="text-align: center">
                         <a href="<?= $path('product_info', ['id' => $productList[$i]->getId()]) ?>"><?= $productList[$i]->getName() ?></a>
+                        <?php if(isset($productList[$i]->oldPrice)) : ?>
+                            <br /><br />
+                            Старая цена: <s style="color: red;"><?= $productList[$i]->oldPrice ?> руб.</s>
+                        <?php endif; ?>
                         <br /><br />
+                        <?php if($productList[$i]->oldPrice) : ?>Новая цена:<?php endif; ?>
                         <?= $productList[$i]->getPrice() ?> руб.
                     </td>
                 <?php endfor; ?>

@@ -21,6 +21,8 @@ class Product
      */
     private $price;
 
+    public $oldPrice;
+
     /**
      * @param int $id
      * @param string $name
@@ -35,8 +37,9 @@ class Product
     
     public function __clone()
     {
-        $this->nane = "Copy of " . $this->title;
-        $this->price = $this->price;
+        $this->name = $this->name . ' - скидка 5%';
+        $this->oldPrice = $this->price;
+        $this->price = $this->price - ($this->price * 0.05); // 5%
     }
 
     /**

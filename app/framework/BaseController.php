@@ -58,12 +58,13 @@ abstract class BaseController
     /**
      * Перенаправление на другую страницу
      * @param string $name
+     * @param string $status code of redirection
      * @return RedirectResponse
      * @throws Exception
      */
-    protected function redirect(string $name): RedirectResponse
+    protected function redirect(string $name, int $status = 200): RedirectResponse
     {
         $route = Registry::getRoute($name);
-        return new RedirectResponse($route);
+        return new RedirectResponse($route, $status);
     }
 }
