@@ -19,16 +19,7 @@ class ProductRepository
             return [];
         }
 
-        $productList = [];
-        foreach ($this->getDataFromSource(['id' => $ids]) as $item) {
-            $productList[] = new Product(
-                $item['id'],
-                $item['name'],
-                $item['price']
-            );
-        }
-
-        return $productList;
+        return $this->fetchAllFromSource($this->getDataFromSource(['id' => $ids]));
     }
 
     /**
@@ -37,16 +28,7 @@ class ProductRepository
      */
     public function fetchAll(): array
     {
-        $productList = [];
-        foreach ($this->getDataFromSource() as $item) {
-            $productList[] = new Product(
-                $item['id'],
-                $item['name'],
-                $item['price']
-            );
-        }
-
-        return $productList;
+        return $this->fetchAllFromSource($this->getDataFromSource());
     }
 
     /**
@@ -113,5 +95,26 @@ class ProductRepository
         };
 
         return array_filter($dataSource, $productFilter);
+    }
+
+    /**
+     * Получаем все продукты
+     * @param array $items
+     * @return ProductRepository[]
+     */
+    private function fetchAllFromSource(array $items): array {
+        // just entity for cloning
+        $product = new Product(-1, '', -1);
+
+        $productList = [];
+        foreach ($items as $item) {
+            $cloneProduct = clone $product;
+            $cloneProduct->setId($item['id']);
+            $cloneProduct->setName($item['name']);
+            $cloneProduct->setPrice($item['price']);
+            $productList[] = $cloneProduct;
+        }
+
+        return $productList;
     }
 }
