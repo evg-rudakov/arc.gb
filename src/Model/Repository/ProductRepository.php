@@ -18,14 +18,14 @@ class ProductRepository
         if (!count($ids)) {
             return [];
         }
-
+        $product = new Product();
         $productList = [];
         foreach ($this->getDataFromSource(['id' => $ids]) as $item) {
-            $productList[] = new Product(
-                $item['id'],
-                $item['name'],
-                $item['price']
-            );
+            $clone = clone $product;
+            $clone->setId($item['id']);
+            $clone->setName($item['name']);
+            $clone->setPrice($item['price']);
+            $productList[] = $clone;
         }
 
         return $productList;
