@@ -38,12 +38,13 @@ class ProductRepository
     public function fetchAll(): array
     {
         $productList = [];
+        $product = new Product();
         foreach ($this->getDataFromSource() as $item) {
-            $productList[] = new Product(
-                $item['id'],
-                $item['name'],
-                $item['price']
-            );
+            $clone = clone $product;
+            $clone->setId($item['id']);
+            $clone->setName($item['name']);
+            $clone->setPrice($item['price']);
+            $productList[] = $clone;
         }
 
         return $productList;
