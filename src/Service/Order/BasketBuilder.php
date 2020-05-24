@@ -51,16 +51,6 @@ class BasketBuilder
         $this->invoice = $invoice;
     }
 
-    public function __construct()
-    {
-        $this->reset();
-    }
-
-    public function reset(): void
-    {
-        $this->product = new Product1;
-    }
-
     /**
      * @return mixed
      */
@@ -104,7 +94,6 @@ class BasketBuilder
 
     public function build(): BasketBuilder
     {
-        $this->reset();
         return $this;
     }
 
