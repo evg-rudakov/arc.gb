@@ -88,37 +88,14 @@ class Basket
 
     /**
      * Оформление заказа
-     * @param BasketBuilder $basketBuilder
+     * @param CheckOutFacade $facade
      * @return void
-     * @throws BillingException
-     * @throws CommunicationException
      */
-    public function checkout(BasketBuilder $basketBuilder): void
+    public function checkout(CheckOutFacade $facade): void
     {
-        // здесь должна быть логика получения параметров платежа
-        $billing = new Card();
-        $basketBuilder->setBilling($billing);
+        $facade->setUpCheckOut(new BasketBuilder(),$this->session,$this->calculateProductsTotalPrice());
 
-
-        // Здесь должна быть некоторая логика получения информации о скидке
-        // пользователя
-        $discount = new NullObject();
-        $basketBuilder->setDiscount($discount);
-
-
-        // Здесь должна быть некоторая логика получения способа уведомления
-        // пользователя о покупке
-        $communication = new Email();
-        $basketBuilder->setCommunication($communication);
-
-        $security = new Security($this->session);
-        $basketBuilder->setUser($security);
-        $basketBuilder->setInvoice($this->calculateProductsTotalPrice());
-
-        $checkOut = new CheckOutProcees($basketBuilder->build());
-        $checkOut->process();
     }
-
 
     /**
      * Фабричный метод для репозитория Product

@@ -11,7 +11,7 @@ use Service\Communication\Exception\CommunicationException;
 use Service\Discount\DiscountInterface;
 use Service\User\SecurityInterface;
 
-class CheckOutProcees
+class CheckOutProcess
 {
     private $discount;
     private $billing;
@@ -28,7 +28,7 @@ class CheckOutProcees
         $this->invoice = $builder->getInvoice();
     }
 
-    public function process()
+    public function process():void
     {
         $discount = $this->discount->getDiscount();
         $totalPrice = $this->invoice - $this->invoice / 100 * $discount;

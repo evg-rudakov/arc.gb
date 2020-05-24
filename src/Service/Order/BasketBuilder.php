@@ -46,9 +46,11 @@ class BasketBuilder
     /**
      * @param mixed $invoice
      */
-    public function setInvoice($invoice): void
+    public function setInvoice($invoice)
     {
         $this->invoice = $invoice;
+        return $this;
+
     }
 
     /**
