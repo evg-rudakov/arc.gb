@@ -18,14 +18,10 @@ class ProductRepository
         if (!count($ids)) {
             return [];
         }
-        $product = new Product();
         $productList = [];
         foreach ($this->getDataFromSource(['id' => $ids]) as $item) {
-            $clone = clone $product;
-            $clone->setId($item['id']);
-            $clone->setName($item['name']);
-            $clone->setPrice($item['price']);
-            $productList[] = $clone;
+            $product = new Product($item['id'],$item['name'],$item['price']);
+            $productList[] = $product;
         }
 
         return $productList;
@@ -38,13 +34,10 @@ class ProductRepository
     public function fetchAll(): array
     {
         $productList = [];
-        $product = new Product();
+
         foreach ($this->getDataFromSource() as $item) {
-            $clone = clone $product;
-            $clone->setId($item['id']);
-            $clone->setName($item['name']);
-            $clone->setPrice($item['price']);
-            $productList[] = $clone;
+            $product = new Product($item['id'], $item['name'], $item['price']);
+            $productList[] = $product;
         }
 
         return $productList;
