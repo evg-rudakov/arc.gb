@@ -39,6 +39,16 @@ class UserRepository
         return null;
     }
 
+    public function findByName($name){
+        foreach ($this->getDataFromSource(['login' => $name]) as $user) {
+            if ($user['login'] === $name) {
+                return $this->createUser($user);
+            }
+        }
+
+        return null;
+    }
+
     /**
      * Фабрика по созданию сущности пользователя
      * @param array $user

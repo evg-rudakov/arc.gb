@@ -6,6 +6,8 @@ namespace Controller;
 
 use Exception;
 use Framework\BaseController;
+use Model\Repository\UserRepository;
+use Service\SocialNetwork\SocialNetworkAuth;
 use Service\User\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,6 +43,35 @@ class UserController extends BaseController
             ['error' => $error ?? '']
         );
     }
+
+    /**
+     * Производим аутентификацию и авторизацию
+     * @param Request $request
+     * @param $socialNetwork
+     * @return Response
+     */
+    public function authenticationSocialMediaAction(Request $request, $socialNetwork): Response
+    {
+
+        $user = new Security($request->getSession());
+
+        $socialNetworkAuth = ucfirst($socialNetwork) . 'Auth';
+        $isAuthenticationSuccess = (new $socialNetworkAuth)->authentication($user);
+
+        if ($isAuthenticationSuccess) {
+            return $this->render(
+                'user/authentication_success.html.php',
+                ['user' => $user->getUser()]
+            );
+        }
+        $error = 'Ошибка авторизации с помощью ' . $socialNetwork;
+        return $this->render(
+            'user/authentication.html.php',
+            ['error' => $error ?? '']
+        );
+
+    }
+
 
     /**
      * Выходим из системы
