@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 abstract class BaseController
+//паттерн шаблонный метод. Базовый контролер включет общие методы, наследуется всеми когтролерами
 {
     /**
      * Отрисовка страницы
