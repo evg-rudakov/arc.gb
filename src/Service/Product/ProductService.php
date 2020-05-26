@@ -7,6 +7,8 @@ namespace Service\Product;
 use Model;
 use Model\Entity\Product;
 use Model\Repository\ProductRepository;
+use Service\Product\Sorting\SortingFactory;
+use Service\Product\Sorting\SortingInterface;
 
 class ProductService
 {
@@ -25,16 +27,13 @@ class ProductService
      * Получаем все продукты
      * @param string $sortType
      * @return Product[]
+     * @throws \Exception
      */
     public function getAll(string $sortType): array
     {
         $productList = $this->getProductRepository()->fetchAll();
-
-        // Применить паттерн Стратегия
-        // $sortType === 'price'; // Сортировка по цене
-        // $sortType === 'name'; // Сортировка по имени
-
-        return $productList;
+        $sorter = SortingFactory::getSortingMethod($sortType);
+        return $sorter->sort($productList);
     }
 
   /*Фабричный метод применяется для создания репозитория
