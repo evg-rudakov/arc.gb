@@ -1,6 +1,5 @@
 <?php
 
-use Commands\KernelCommand;
 use Framework\Registry;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,6 +12,5 @@ $containerBuilder = new ContainerBuilder();
 
 Registry::addContainer($containerBuilder);
 
-//$response = (new Kernel($containerBuilder))->handle($request);
-$response = (new KernelCommand(new Kernel($containerBuilder)))->execute($request);
+$response = (new Kernel($containerBuilder))->handle($request);
 $response->send();
