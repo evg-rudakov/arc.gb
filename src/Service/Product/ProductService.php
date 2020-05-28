@@ -7,15 +7,18 @@ namespace Service\Product;
 use Model;
 use Model\Entity\Product;
 use Model\Repository\ProductRepository;
+use Service\Comparator\NameComparator;
+use Service\Comparator\PriceComparator;
+use Service\Sorter\ProductSorter;
 
 class ProductService
 {
     /**
      * Получаем информацию по конкретному продукту
      * @param int $id
-     * @return Product|null
+     * @return ProductRepository
      */
-    public function getInfo(int $id): ?Product
+    public function getInfo(int $id): ?ProductRepository
     {
         $product = $this->getProductRepository()->search([$id]);
         return count($product) ? $product[0] : null;
@@ -29,6 +32,13 @@ class ProductService
     public function getAll(string $sortType): array
     {
         $productList = $this->getProductRepository()->fetchAll();
+
+        $comparators = [
+            'price' => new PriceComparator(),
+            'name' => new NameComparator()
+        ];
+
+        $productList = (new ProductSorter($comparators[$sortType]))->sort($productList);
 
         // Применить паттерн Стратегия
         // $sortType === 'price'; // Сортировка по цене
