@@ -15,4 +15,5 @@ Registry::addContainer($containerBuilder);
 
 //$response = (new Kernel($containerBuilder))->handle($request);
 $response = (new KernelCommand(new Kernel($containerBuilder)))->execute($request);
+
 $response->send();
